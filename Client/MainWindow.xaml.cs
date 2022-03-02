@@ -74,6 +74,9 @@ namespace Client
                                 probability2;
             }
 
+            _points2 = GenerateExtraPoints(-_offset, _points2[0].X, mathExpectation2, standardDeviation2, probability2).Concat(_points2).ToArray();
+            _points1 = _points1.Concat(GenerateExtraPoints(_points1[^1].X, 600 + _offset, mathExpectation1, standardDeviation1, probability1)).ToArray();
+            
             Draw();
         }
 
@@ -95,6 +98,26 @@ namespace Client
             });
         }
 
+        private List<Point> GenerateExtraPoints(double min, double max, double mathExpectation,
+            double standardDeviation, double probability)
+        {
+            var points = new List<Point>();
+            var current = min;
+
+            while (current < max)
+            {
+                points.Add(new Point()
+                {
+                    X = current,
+                    Y = Algorithm.CountProbabilityDensity(mathExpectation, standardDeviation, current) * probability
+                });
+
+                current += 0.1;
+            }
+
+            return points;
+        }
+        
         private void DrawAxis()
         {
             var xAxisLine = new Line()
@@ -164,6 +187,9 @@ namespace Client
             Canvas.SetLeft(textBlock1, _points1[_points1.Length / 2].X * scaleX);
             Canvas.SetTop(textBlock1, Chart.ActualHeight - _points1[_points1.Length / 2].Y * scaleY);
             Chart.Children.Add(textBlock1);
+
+            var min = (int)_points1.Min(p => p.X);
+            var max = (int)_points2.Max(p => p.X);
             
             for (var i = 0; i < _points1.Length - 1; i++)
             {
