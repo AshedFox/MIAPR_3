@@ -31,9 +31,9 @@ public static class Algorithm
         {
             g1 = CountProbabilityDensity(mathExpectation1, standardDeviation1, x) * probability1;
             g2 = CountProbabilityDensity(mathExpectation2, standardDeviation2, x) * probability2;
-            result += g2 / probability2 * 0.001;
+            result += g2 * 0.001;
             x += 0.001;
-        } while (g1 >= g2);
+        } while (g2 < g1);
 
         return (error: result, end: x);
     }

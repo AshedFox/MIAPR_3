@@ -59,9 +59,7 @@ namespace Client
 
             _missingDetectionError = Algorithm.CountMissingDetectionError(_separationLine, 750 + _offset, _falseAlertError,
                 mathExpectation1, standardDeviation1, probability1);
-
-            _falseAlertError /= probability1;
-            _missingDetectionError /= probability1;
+            
             _totalError = _falseAlertError + _missingDetectionError;
 
             FalseAlarmErrorLabel.Content = $"Ложная тревога: {_falseAlertError}";
